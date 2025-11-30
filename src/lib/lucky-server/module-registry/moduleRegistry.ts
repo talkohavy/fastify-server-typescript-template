@@ -1,4 +1,3 @@
-import type { FastifyInstance } from 'fastify';
 import type { ModuleFactory, StaticModule } from './types';
 
 export class ModuleRegistry {
@@ -16,7 +15,7 @@ export class ModuleRegistry {
     });
   }
 
-  attachAllControllers(server: FastifyInstance): void {
+  attachAllControllers(server: any): void {
     this.registeredModules.forEach((module) => {
       module.attachController(server);
     });
