@@ -3,6 +3,7 @@ import Fastify, { type FastifyInstance } from 'fastify';
 import type { AppOptions } from './types';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
 import ourFirstRoute from './modules/our-first-route';
+import routesWithAbortCleanup from './modules/routes-with-abort-cleanup';
 import routesWithSerialization from './modules/routes-with-serialization';
 import routesWithValidation from './modules/routes-with-validation';
 
@@ -30,6 +31,7 @@ export async function buildApp(options?: AppOptions) {
   app.register(ourFirstRoute);
   app.register(routesWithValidation);
   app.register(routesWithSerialization);
+  app.register(routesWithAbortCleanup);
 
   return app;
 }
