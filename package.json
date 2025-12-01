@@ -8,6 +8,8 @@
   },
   "scripts": {
     "dev": "tsx watch src/initServer.ts",
+    "test": "node --import tsx --test src/**/*.test.ts",
+    "test:only": "node --import tsx --test-only --test src/**/*.test.ts",
     "ignore:build:ts": "tsc",
     "ignore:watch:ts": "tsc -w",
     "ignore:test": "npm run build:ts && tsc -p test/tsconfig.json && c8 node --test -r ts-node/register \"test/**/*.ts\"",
