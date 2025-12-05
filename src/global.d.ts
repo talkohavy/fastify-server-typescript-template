@@ -5,6 +5,11 @@ declare module 'fastify' {
 
   export interface FastifyRequest {
     helloRequest: string;
+    foo: any;
+  }
+
+  export interface FastifyReply {
+    foo: any;
   }
 }
 
