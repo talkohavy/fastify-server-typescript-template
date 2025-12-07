@@ -67,10 +67,10 @@ export class ValidationExamplesController implements ControllerFactory {
       querystring: queryStringJsonSchema,
     };
 
-    this.app.post(API_URLS.validateQueryParamsByJson, { schema }, async (req, _res) => {
+    this.app.get(API_URLS.validateQueryParamsByJson, { schema }, async (req, _res) => {
       const { query } = req;
 
-      logger.info('POST /api/validation/validate-query-params-by-json - validating query params by json');
+      logger.info('GET /api/validation/validate-query-params-by-json - validating query params by json');
 
       return query;
     });
@@ -80,8 +80,8 @@ export class ValidationExamplesController implements ControllerFactory {
     const paramsJsonSchema = {
       type: 'object',
       properties: {
-        par1: { type: 'string' },
-        par2: { type: 'number' },
+        part1: { type: 'string' },
+        part2: { type: 'number' },
       },
     };
 
@@ -89,10 +89,10 @@ export class ValidationExamplesController implements ControllerFactory {
       params: paramsJsonSchema,
     };
 
-    this.app.post(`${API_URLS.validateParamsByJson}/:part1/:part2`, { schema }, async (req, _res) => {
+    this.app.get(`${API_URLS.validateParamsByJson}/:part1/:part2`, { schema }, async (req, _res) => {
       const { params } = req;
 
-      logger.info('POST /api/validation/validate-params-by-json - validating params by json');
+      logger.info('GET /api/validation/validate-params-by-json - validating params by json');
 
       return params;
     });
