@@ -123,6 +123,7 @@ export class ValidationExamplesController implements ControllerFactory {
     this.app.addSchema({
       $id: 'pre-added-schema',
       type: 'object',
+      required: ['email'],
       properties: {
         email: { type: 'string' },
       },
