@@ -9,6 +9,7 @@ import { routesWithBodySerialization } from './modules/routes-with-body-serializ
 import { routesWithBodyValidation } from './modules/routes-with-body-validation';
 import { routesWithResponseSerialization } from './modules/routes-with-response-serialization';
 import { ValidationExamplesModule } from './modules/validation-examples';
+import { errorHandlerPlugin } from './plugins/errorHandler.plugin';
 
 const allowedOrigins = ['http://localhost:3000'];
 
@@ -45,7 +46,7 @@ export async function buildApp(options?: AppOptions) {
     // optimizedModules,
   );
 
-  // appModule.registerErrorHandler(errorHandlerPlugin);
+  appModule.registerErrorHandler(errorHandlerPlugin);
 
   app.register(ourFirstRoute);
   app.register(routesWithBodySerialization);
