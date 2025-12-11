@@ -1,6 +1,7 @@
 import cors from '@fastify/cors';
 import Fastify, { type FastifyInstance } from 'fastify';
 import type { AppOptions } from './types';
+import { AppFactory } from './lib/lucky-server';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
 import ourFirstRoute from './modules/our-first-route';
 import routesWithAbortCleanup from './modules/routes-with-abort-cleanup';
@@ -28,8 +29,23 @@ export async function buildApp(options?: AppOptions) {
     credentials: true, // <--- Required! When a client request has `include:'credentials'`, this option must be set to true. Otherwise, the request will be blocked.
   });
 
-  HealthCheckModule.getInstance().registerController(app);
-  ValidationExamplesModule.getInstance().registerController(app);
+  const appModule = new AppFactory(app);
+
+  appModule.registerPlugins([
+    // corsPlugin,
+    // helmetPlugin,
+    // requestIdPlugin,
+    // bodyLimitPlugin,
+    // urlEncodedPlugin,
+    // cookieParserPlugin,
+  ]);
+
+  appModule.registerModules(
+    [HealthCheckModule, ValidationExamplesModule],
+    // optimizedModules,
+  );
+
+  // appModule.registerErrorHandler(errorHandlerPlugin);
 
   app.register(ourFirstRoute);
   app.register(routesWithBodySerialization);

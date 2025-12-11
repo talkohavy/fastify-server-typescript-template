@@ -1,20 +1,15 @@
-import type { FastifyInstance } from 'fastify';
-import type { ModuleFactory } from '../../lib/lucky-server';
 import { HealthCheckController } from './health-check.controller';
 
-export class HealthCheckModule implements ModuleFactory {
-  private static instance: HealthCheckModule;
-
-  private constructor() {}
-
-  static getInstance(): HealthCheckModule {
-    if (!HealthCheckModule.instance) {
-      HealthCheckModule.instance = new HealthCheckModule();
-    }
-    return HealthCheckModule.instance;
+export class HealthCheckModule {
+  constructor(private readonly app: any) {
+    this.initializeModule();
   }
 
-  registerController(app: FastifyInstance): void {
+  private async initializeModule(): Promise<void> {
+    this.attachController(this.app);
+  }
+
+  private attachController(app: any): void {
     const controller = new HealthCheckController(app);
 
     controller.attachRoutes();
