@@ -28,7 +28,7 @@ function globalErrorMiddleware(error: any, _req: FastifyRequest, res: FastifyRep
   // if (condition) logger.error(error.message); // <--- store the error if <condition>...
 
   const data = {
-    statusCode: res.statusCode ?? error.statusCode ?? StatusCodes.INTERNAL_ERROR,
+    statusCode: error.statusCode ?? StatusCodes.INTERNAL_ERROR,
     message: error.message,
   };
 
