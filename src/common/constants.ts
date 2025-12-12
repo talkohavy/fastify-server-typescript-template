@@ -11,7 +11,8 @@ export const API_URLS = {
   validateParamsByJson: '/api/validation/validate-params-by-json',
   validateHeadersByJson: '/api/validation/validate-headers-by-json',
   validatePreAddedSchema: '/api/validation/validate-pre-added-schema',
-};
+  handleValidationErrorInsideRoute: '/api/validation/handle-validation-error-inside-route',
+} satisfies Record<string, `/${string}`>;
 
 export const StatusCodes = {
   OK: 200,

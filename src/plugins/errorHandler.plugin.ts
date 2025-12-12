@@ -20,10 +20,15 @@ function globalErrorMiddleware(error: any, _req: FastifyRequest, res: FastifyRep
   console.error(error);
   console.error('▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲');
 
+  if (error.validation) {
+    res.status(422).send(new Error('validation failed'));
+    return;
+  }
+
   // if (condition) logger.error(error.message); // <--- store the error if <condition>...
 
   const data = {
-    statusCode: error.statusCode ?? StatusCodes.INTERNAL_ERROR,
+    statusCode: res.statusCode ?? error.statusCode ?? StatusCodes.INTERNAL_ERROR,
     message: error.message,
   };
 

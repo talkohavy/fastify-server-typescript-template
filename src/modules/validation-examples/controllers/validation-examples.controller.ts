@@ -1,4 +1,4 @@
-import type { FastifyInstance } from 'fastify';
+import type { FastifyInstance, RouteShorthandOptions } from 'fastify';
 import type { ControllerFactory } from '../../../lib/lucky-server';
 import { API_URLS } from '../../../common/constants';
 
@@ -119,6 +119,7 @@ export class ValidationExamplesController implements ControllerFactory {
       return headers;
     });
   }
+
   private validatePreAddedSchema() {
     this.app.addSchema({
       $id: 'pre-added-schema',
@@ -142,11 +143,42 @@ export class ValidationExamplesController implements ControllerFactory {
     );
   }
 
+  /**
+   * DOESN'T WORK AS DOCUMENTATION SAYS!!!
+   */
+  private handleValidationErrorInsideRoute() {
+    const opts: RouteShorthandOptions = {
+      attachValidation: true, // <--- This is the important part!
+      schema: {
+        body: {
+          type: 'object',
+          properties: {
+            bookId: { type: 'number' },
+          },
+        },
+      },
+    };
+
+    this.app.post(API_URLS.handleValidationErrorInsideRoute, opts, async (req, res) => {
+      logger.info(`POST ${API_URLS.handleValidationErrorInsideRoute} - handling validation error inside route`);
+
+      if (req.validationError) {
+        // `req.validationError.validation` contains the raw validation error
+        // IMPORTANT: Return early to prevent further execution
+        return res.code(407).send(req.validationError);
+      }
+
+      const { body } = req;
+      return body;
+    });
+  }
+
   registerRoutes() {
     this.validateBodyByJson();
     this.validateQueryParamsByJson();
     this.validateParamsByJson();
     this.validateHeadersByJson();
     this.validatePreAddedSchema();
+    this.handleValidationErrorInsideRoute();
   }
 }
