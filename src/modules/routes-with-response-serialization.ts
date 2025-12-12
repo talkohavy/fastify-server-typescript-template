@@ -15,6 +15,6 @@ export async function routesWithResponseSerialization(fastify: FastifyInstance, 
   };
 
   fastify.get('/api/response-serialization', opts, async (_request, _reply) => {
-    return { message: 'my serialized response' };
+    return { message: 'my serialized response', thisKeyWillNotBeSent: 'this key will not be sent' };
   });
 }
