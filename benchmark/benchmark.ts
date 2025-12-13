@@ -1,4 +1,4 @@
-import autocannon from 'autocannon';
+import autocannon, { type Result } from 'autocannon';
 import { buildApp } from '../src/app';
 
 const PORT = 3333;
@@ -68,7 +68,7 @@ async function main() {
   await app.listen({ port: PORT });
   console.log(`Server started on port ${PORT}`);
 
-  const results: Array<{ title: string; result: autocannon.Result }> = [];
+  const results: Array<{ title: string; result: Result }> = [];
 
   try {
     for (const benchmark of benchmarks) {
