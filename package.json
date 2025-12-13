@@ -12,6 +12,10 @@
     "test:only": "node --import tsx --test-only --test src/**/*.test.ts",
     "benchmark": "tsx benchmark/benchmark.ts",
     "benchmark:quick": "concurrently -k -s first \"tsx src/initServer.ts\" \"npx autocannon -c 100 -d 5 -p 10 http://localhost:8000/api/health-check\"",
+    "k6:smoke": "k6 run benchmark/k6/smoke-test.js",
+    "k6:load": "k6 run benchmark/k6/load-test.js",
+    "k6:stress": "k6 run benchmark/k6/stress-test.js",
+    "k6:health": "k6 run benchmark/k6/health-check.js",
     "ignore:build:ts": "tsc",
     "ignore:watch:ts": "tsc -w",
     "ignore:test": "npm run build:ts && tsc -p test/tsconfig.json && c8 node --test -r ts-node/register \"test/**/*.ts\"",
@@ -32,6 +36,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.3.8",
     "@eslint/js": "^9.39.1",
+    "@types/k6": "^1.4.0",
     "@types/node": "^24.10.1",
     "autocannon": "^8.0.0",
     "c8": "^10.1.2",
