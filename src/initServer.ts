@@ -27,3 +27,13 @@ async function startServer() {
 }
 
 startServer();
+
+process.on('unhandledRejection', (err) => {
+  console.error('unhandledRejection', { err });
+  console.error('Should not get here!  You are missing a try/catch somewhere.');
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('uncaughtException', { err });
+  console.error('Should not get here! You are missing a try/catch somewhere.');
+});
