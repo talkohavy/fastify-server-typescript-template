@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 
 export default async function routesWithAbortCleanup(app: FastifyInstance, _options: object) {
-  app.post('/api/users', async (request, reply) => {
+  app.post('/api/abort-with-cleanup', async (request, reply) => {
     /**
      * doesn't work as expected!
      * The `close` event is triggered immediately!
