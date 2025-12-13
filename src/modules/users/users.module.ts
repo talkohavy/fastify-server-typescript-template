@@ -1,3 +1,4 @@
+import type { FastifyInstance } from 'fastify';
 import type { IUsersRepository } from './repositories/interfaces/users.repository.base';
 import { UserUtilitiesController } from './controllers/user-utilities.controller';
 import { UsersCrudController } from './controllers/users-crud.controller';
@@ -13,14 +14,17 @@ export class UsersModule {
   private usersCrudService!: UsersCrudService;
   private userUtilitiesService!: UserUtilitiesService;
 
-  constructor(private readonly app: any) {
+  constructor(private readonly app: FastifyInstance) {
     this.initializeModule();
   }
 
   private async initializeModule(): Promise<void> {
     // Initialize repositories
-    // this.usersRepository = new UsersMongoRepository();
-    this.usersRepository = new UsersPostgresRepository();
+    // this.usersRepository = new UsersMongoRepository(this.app.mongo);
+    this.usersRepository = new UsersPostgresRepository(this.app.pg);
+
+    // For MongoDB, use:
+    // this.usersRepository = new UsersMongoRepository(this.app.mongo);
 
     // Initialize helper services
     const fieldScreeningService = new FieldScreeningService(['hashed_password'], ['nickname']);
