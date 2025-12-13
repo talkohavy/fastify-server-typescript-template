@@ -7,6 +7,7 @@ import ourFirstRoute from './modules/our-first-route';
 import routesWithAbortCleanup from './modules/routes-with-abort-cleanup';
 import { routesWithBodyValidation } from './modules/routes-with-body-validation';
 import { SerializationExamplesModule } from './modules/serialization-examples/serialization-examples.module';
+import { UsersModule } from './modules/users';
 import { ValidationExamplesModule } from './modules/validation-examples';
 import { errorHandlerPlugin } from './plugins/errorHandler.plugin';
 import { pathNotFoundPlugin } from './plugins/pathNotFound.plugin';
@@ -42,7 +43,7 @@ export async function buildApp(options?: AppOptions) {
   ]);
 
   appModule.registerModules(
-    [HealthCheckModule, ValidationExamplesModule, SerializationExamplesModule],
+    [HealthCheckModule, UsersModule, ValidationExamplesModule, SerializationExamplesModule],
     // optimizedModules,
   );
 
