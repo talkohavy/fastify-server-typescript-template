@@ -85,10 +85,10 @@ export class UsersCrudController implements ControllerFactory {
   }
 
   registerRoutes() {
-    this.app.register(this.createUser);
-    this.app.register(this.getUsers);
-    this.app.register(this.getUserById);
-    this.app.register(this.updateUserById);
-    this.app.register(this.deleteUserById);
+    this.app.register(this.createUser.bind(this));
+    this.app.register(this.getUsers.bind(this));
+    this.app.register(this.getUserById.bind(this));
+    this.app.register(this.updateUserById.bind(this));
+    this.app.register(this.deleteUserById.bind(this));
   }
 }
