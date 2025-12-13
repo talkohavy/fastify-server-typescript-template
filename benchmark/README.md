@@ -9,13 +9,13 @@ This directory contains tools and scripts for measuring the performance of your 
 
 ## Why Benchmark & Load Test?
 
-| Purpose | Question It Answers |
-|---------|---------------------|
-| **Performance baseline** | "How fast is my endpoint?" |
-| **Capacity planning** | "How many users can my server handle?" |
-| **Regression detection** | "Did my changes make things slower?" |
-| **Breaking point** | "At what load does my server fail?" |
-| **SLA validation** | "Does my API meet response time requirements?" |
+| Purpose                  | Question It Answers                            |
+| ------------------------ | ---------------------------------------------- |
+| **Performance baseline** | "How fast is my endpoint?"                     |
+| **Capacity planning**    | "How many users can my server handle?"         |
+| **Regression detection** | "Did my changes make things slower?"           |
+| **Breaking point**       | "At what load does my server fail?"            |
+| **SLA validation**       | "Does my API meet response time requirements?" |
 
 ---
 
@@ -37,14 +37,14 @@ pnpm k6:stress        # k6 stress test (find breaking points)
 
 ## Tools Comparison
 
-| Aspect | Autocannon | k6 |
-|--------|------------|-----|
-| **Best for** | Quick endpoint benchmarks | Realistic load scenarios |
-| **Setup** | npm package | System binary (brew install k6) |
-| **Scripting** | Programmatic TypeScript | JavaScript with k6 API |
-| **User simulation** | Concurrent connections | Virtual Users (VUs) with behaviors |
-| **Metrics** | Basic (req/s, latency) | Rich (custom metrics, thresholds, checks) |
-| **CI/CD ready** | ✅ | ✅ (with pass/fail thresholds) |
+| Aspect              | Autocannon                | k6                                        |
+| ------------------- | ------------------------- | ----------------------------------------- |
+| **Best for**        | Quick endpoint benchmarks | Realistic load scenarios                  |
+| **Setup**           | npm package               | System binary (brew install k6)           |
+| **Scripting**       | Programmatic TypeScript   | JavaScript with k6 API                    |
+| **User simulation** | Concurrent connections    | Virtual Users (VUs) with behaviors        |
+| **Metrics**         | Basic (req/s, latency)    | Rich (custom metrics, thresholds, checks) |
+| **CI/CD ready**     | ✅                        | ✅ (with pass/fail thresholds)            |
 
 ---
 
@@ -84,11 +84,11 @@ npx autocannon -c 100 -d 10 -p 10 http://localhost:8000/api/health-check
 
 ### Options Explained
 
-| Flag | Meaning |
-|------|---------|
-| `-c 100` | 100 concurrent connections |
-| `-d 10` | Run for 10 seconds |
-| `-p 10` | 10 pipelined requests per connection |
+| Flag     | Meaning                              |
+| -------- | ------------------------------------ |
+| `-c 100` | 100 concurrent connections           |
+| `-d 10`  | Run for 10 seconds                   |
+| `-p 10`  | 10 pipelined requests per connection |
 
 ### Output Metrics
 
@@ -169,13 +169,14 @@ When you run a k6 script, it executes these exported functions in order:
 pnpm k6:smoke
 ```
 
-| Setting | Value |
-|---------|-------|
-| Virtual Users | 1 |
-| Duration | 10 seconds |
-| Use Case | Pre-deployment validation |
+| Setting       | Value                     |
+| ------------- | ------------------------- |
+| Virtual Users | 1                         |
+| Duration      | 10 seconds                |
+| Use Case      | Pre-deployment validation |
 
 **When to use:**
+
 - Before every deployment
 - After infrastructure changes
 - Quick "is it working?" check
@@ -190,14 +191,15 @@ pnpm k6:smoke
 pnpm k6:health
 ```
 
-| Stage | Duration | Target VUs |
-|-------|----------|------------|
-| Ramp up | 10s | 0 → 10 |
-| Ramp up | 30s | 10 → 50 |
-| Sustain | 1m | 50 |
-| Ramp down | 10s | 50 → 0 |
+| Stage     | Duration | Target VUs |
+| --------- | -------- | ---------- |
+| Ramp up   | 10s      | 0 → 10     |
+| Ramp up   | 30s      | 10 → 50    |
+| Sustain   | 1m       | 50         |
+| Ramp down | 10s      | 50 → 0     |
 
 **When to use:**
+
 - Verify health check endpoint performance
 - Quick load verification
 
@@ -212,15 +214,18 @@ pnpm k6:load
 ```
 
 **Scenarios:**
+
 1. **Constant load** - 20 VUs for 1 minute
 2. **Ramping load** - 0 → 50 → 100 → 0 VUs over several minutes
 
 **Features:**
+
 - Custom metrics (health_check_duration, health_check_success)
 - Setup/teardown lifecycle hooks
 - Multiple scenarios running in sequence
 
 **When to use:**
+
 - Before major releases
 - After performance-related changes
 - Regular performance regression checks
@@ -235,17 +240,18 @@ pnpm k6:load
 pnpm k6:stress
 ```
 
-| Stage | Duration | Target VUs | Purpose |
-|-------|----------|------------|---------|
-| Warm up | 30s | 50 | Baseline |
-| Normal | 1m | 100 | Expected load |
-| Stress | 1m | 200 | Above normal |
-| Breaking | 1m | 300 | Find limits |
-| Spike | 30s | 500 | Extreme spike |
-| Recovery | 1m | 100 | Can it recover? |
-| Cool down | 30s | 0 | Graceful end |
+| Stage     | Duration | Target VUs | Purpose         |
+| --------- | -------- | ---------- | --------------- |
+| Warm up   | 30s      | 50         | Baseline        |
+| Normal    | 1m       | 100        | Expected load   |
+| Stress    | 1m       | 200        | Above normal    |
+| Breaking  | 1m       | 300        | Find limits     |
+| Spike     | 30s      | 500        | Extreme spike   |
+| Recovery  | 1m       | 100        | Can it recover? |
+| Cool down | 30s      | 0          | Graceful end    |
 
 **When to use:**
+
 - Capacity planning
 - Before scaling infrastructure
 - Finding bottlenecks
@@ -268,13 +274,13 @@ export const options = {
 
 Common threshold patterns:
 
-| Threshold | Meaning |
-|-----------|---------|
+| Threshold     | Meaning                     |
+| ------------- | --------------------------- |
 | `p(95) < 200` | 95th percentile under 200ms |
 | `p(99) < 500` | 99th percentile under 500ms |
-| `avg < 100` | Average under 100ms |
-| `rate < 0.01` | Less than 1% failure rate |
-| `rate > 0.99` | More than 99% success rate |
+| `avg < 100`   | Average under 100ms         |
+| `rate < 0.01` | Less than 1% failure rate   |
+| `rate > 0.99` | More than 99% success rate  |
 
 ---
 
@@ -291,51 +297,6 @@ k6 run -e BASE_URL=https://staging.example.com benchmark/k6/load-test.js
 
 # Production (be careful!)
 k6 run -e BASE_URL=https://api.example.com benchmark/k6/smoke-test.js
-```
-
----
-
-## CI/CD Integration
-
-### GitHub Actions Example
-
-```yaml
-name: Performance Tests
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  load-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup k6
-        uses: grafana/setup-k6-action@v1
-        
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          
-      - name: Install dependencies
-        run: pnpm install
-        
-      - name: Start server
-        run: pnpm dev &
-        
-      - name: Wait for server
-        run: sleep 5
-        
-      - name: Run smoke test
-        run: k6 run benchmark/k6/smoke-test.js
-        
-      - name: Run load test
-        run: k6 run benchmark/k6/load-test.js
 ```
 
 ---
@@ -385,4 +346,3 @@ checks:            85.00% ✓ 4250 ✗ 750
 - [Autocannon GitHub](https://github.com/mcollina/autocannon)
 - [k6 GitHub](https://github.com/grafana/k6)
 - [Load Testing Best Practices](https://grafana.com/load-testing/load-testing-best-practices/)
-
