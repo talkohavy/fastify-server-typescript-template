@@ -2,6 +2,7 @@ import cors from '@fastify/cors';
 import Fastify, { type FastifyInstance } from 'fastify';
 import type { AppOptions } from './types';
 import { AppFactory } from './lib/lucky-server';
+import { DragonsModule } from './modules/dragons/dragons.module';
 import { HealthCheckModule } from './modules/health-check/health-check.module';
 import ourFirstRoute from './modules/our-first-route';
 import routesWithAbortCleanup from './modules/routes-with-abort-cleanup';
@@ -55,7 +56,7 @@ export async function buildApp(options?: AppOptions) {
   ]);
 
   appModule.registerModules(
-    [HealthCheckModule, UsersModule, ValidationExamplesModule, SerializationExamplesModule],
+    [HealthCheckModule, DragonsModule, UsersModule, ValidationExamplesModule, SerializationExamplesModule],
     // optimizedModules,
   );
 

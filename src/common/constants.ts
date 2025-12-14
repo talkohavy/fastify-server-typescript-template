@@ -5,6 +5,9 @@ export const API_URLS = {
   userById: '/api/users/:userId',
   getProfile: '/api/users/get-profile',
   getUserByEmail: '/api/users/get-by-email',
+  // dragons
+  dragons: '/api/dragons',
+  dragonById: '/api/dragons/:dragonId',
   // validation examples
   validateBodyByJson: '/api/validation/validate-body-by-json',
   validateQueryParamsByJson: '/api/validation/validate-query-params-by-json',
