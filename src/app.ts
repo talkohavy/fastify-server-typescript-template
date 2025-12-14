@@ -18,14 +18,11 @@ import { redisPlugin } from './plugins/redis/redis.plugin';
 export async function buildApp(options?: AppOptions) {
   const app: FastifyInstance = await Fastify(options);
 
-  await app.register(postgresPlugin, {
-    connectionString: process.env.DB_CONNECTION_STRING!,
-  });
-
   const appModule = new AppFactory(app);
 
   await appModule.registerPlugins([
     redisPlugin,
+    postgresPlugin,
     mongodbPlugin,
     corsPlugin,
     // helmetPlugin,
