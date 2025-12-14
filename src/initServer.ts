@@ -1,7 +1,7 @@
 import type { AppOptions } from './types';
 import { buildApp } from './app';
 
-async function start() {
+async function startServer() {
   const options: AppOptions = {
     logger: {
       level: 'debug',
@@ -23,4 +23,14 @@ async function start() {
   }
 }
 
-start();
+startServer();
+
+process.on('unhandledRejection', (err) => {
+  console.error('unhandledRejection', { err });
+  console.error('Should not get here!  You are missing a try/catch somewhere.');
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('uncaughtException', { err });
+  console.error('Should not get here! You are missing a try/catch somewhere.');
+});

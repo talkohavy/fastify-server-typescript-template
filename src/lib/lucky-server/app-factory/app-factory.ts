@@ -1,8 +1,8 @@
-import type { ModuleConstructor, PluginFn } from './types';
+import type { ModuleConstructor, PluginAsyncFn, PluginFn } from './types';
 
 export class AppFactory {
   private registeredModules: any[] = [];
-  private registeredMiddleware: PluginFn[] = [];
+  private registeredPlugins: PluginFn[] = [];
 
   constructor(public readonly app: any) {}
 
@@ -16,14 +16,14 @@ export class AppFactory {
     });
   }
 
-  registerPlugins(middlewares: PluginFn[]): void {
-    middlewares.forEach((middleware) => {
-      this.registeredMiddleware.push(middleware);
-      middleware(this.app);
-    });
+  async registerPlugins(plugins: (PluginFn | PluginAsyncFn)[]): Promise<void> {
+    for (const plugin of plugins) {
+      this.registeredPlugins.push(plugin);
+      await plugin(this.app);
+    }
   }
 
-  registerErrorHandler(errorHandler: PluginFn): void {
+  registerErrorHandler(errorHandler: PluginFn | PluginAsyncFn): void {
     errorHandler(this.app);
   }
 
