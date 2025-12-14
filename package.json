@@ -29,12 +29,12 @@
   "dependencies": {
     "@fastify/autoload": "^6.0.0",
     "@fastify/cors": "^11.1.0",
+    "@fastify/redis": "^7.1.0",
     "@fastify/sensible": "^6.0.0",
     "fastify": "^5.0.0",
     "fastify-plugin": "^5.0.0",
     "mongoose": "^9.0.1",
-    "pg": "^8.16.3",
-    "redis": "^5.10.0"
+    "pg": "^8.16.3"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.8",

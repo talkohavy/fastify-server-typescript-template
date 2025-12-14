@@ -10,9 +10,10 @@ import { routesWithBodyValidation } from './modules/routes-with-body-validation'
 import { SerializationExamplesModule } from './modules/serialization-examples/serialization-examples.module';
 import { UsersModule } from './modules/users';
 import { ValidationExamplesModule } from './modules/validation-examples';
-import { postgresPlugin, redisPlugin } from './plugins/database';
+import { postgresPlugin } from './plugins/database';
 import { errorHandlerPlugin } from './plugins/errorHandler.plugin';
 import { pathNotFoundPlugin } from './plugins/pathNotFound.plugin';
+import { redisPlugin } from './plugins/redis/redis.plugin';
 
 const allowedOrigins = ['http://localhost:3000'];
 
@@ -21,9 +22,6 @@ export async function buildApp(options?: AppOptions) {
 
   await app.register(postgresPlugin, {
     connectionString: process.env.DB_CONNECTION_STRING!,
-  });
-  await app.register(redisPlugin, {
-    connectionString: process.env.REDIS_CONNECTION_STRING!,
   });
   // Uncomment to use MongoDB:
   // await app.register(mongodbPlugin, {
@@ -46,7 +44,8 @@ export async function buildApp(options?: AppOptions) {
 
   const appModule = new AppFactory(app);
 
-  appModule.registerPlugins([
+  await appModule.registerPlugins([
+    redisPlugin,
     // corsPlugin,
     // helmetPlugin,
     // requestIdPlugin,
