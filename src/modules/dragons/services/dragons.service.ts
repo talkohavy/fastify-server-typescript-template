@@ -1,54 +1,60 @@
+import type { FastifyRedis } from '@fastify/redis';
 import type { Dragon } from '../types';
 import type { CreateDragonDto, UpdateDragonDto } from './interfaces/dragons.service.interface';
 
-const database: Array<Dragon> = [];
+const DRAGONS_KEY = 'dragons';
+const DRAGON_ID_COUNTER_KEY = 'dragons:id_counter';
 
 export class DragonsService {
-  constructor() {}
+  constructor(private readonly redis: FastifyRedis) {}
 
   async getDragons(): Promise<Array<Dragon>> {
-    return database;
+    const dragonsJson = await this.redis.hgetall(DRAGONS_KEY);
+    const dragons = Object.values(dragonsJson).map((json) => JSON.parse(json) as Dragon);
+    return dragons;
   }
 
-  async getDragonById(userId: string): Promise<Dragon | null> {
-    const dragon = database.find((dragon) => dragon.id === Number.parseInt(userId, 10));
+  async getDragonById(dragonId: string): Promise<Dragon | null> {
+    const dragonJson = await this.redis.hget(DRAGONS_KEY, dragonId);
 
-    if (!dragon) return null;
+    if (!dragonJson) return null;
 
-    return dragon;
+    return JSON.parse(dragonJson) as Dragon;
   }
 
   async createDragon(dragon: CreateDragonDto): Promise<Dragon> {
-    const newDragon = {
-      id: database.length + 1,
+    // Increment and get new ID atomically
+    const newId = await this.redis.incr(DRAGON_ID_COUNTER_KEY);
+
+    const newDragon: Dragon = {
+      id: newId,
       name: dragon.name,
       author: dragon.author,
       publishedYear: dragon.publishedYear,
     };
 
-    database.push(newDragon);
+    await this.redis.hset(DRAGONS_KEY, String(newId), JSON.stringify(newDragon));
 
     return newDragon;
   }
 
-  async updateDragon(userId: string, user: UpdateDragonDto): Promise<Dragon | null> {
-    const parsedId = Number.parseInt(userId, 10);
-    const dragonIndex = database.findIndex((dragon) => dragon.id === parsedId);
+  async updateDragon(dragonId: string, updates: UpdateDragonDto): Promise<Dragon | null> {
+    const existingDragonJson = await this.redis.hget(DRAGONS_KEY, dragonId);
 
-    if (dragonIndex === -1) return null;
+    if (!existingDragonJson) return null;
 
-    database[dragonIndex] = { ...database[dragonIndex], ...user } as Dragon;
+    const existingDragon = JSON.parse(existingDragonJson) as Dragon;
+    const updatedDragon: Dragon = { ...existingDragon, ...updates };
 
-    return database[dragonIndex];
+    await this.redis.hset(DRAGONS_KEY, dragonId, JSON.stringify(updatedDragon));
+
+    return updatedDragon;
   }
 
-  async deleteDragon(userId: string) {
-    const parsedId = Number.parseInt(userId, 10);
-    const dragonIndex = database.findIndex((dragon) => dragon.id === parsedId);
+  async deleteDragon(dragonId: string): Promise<{ message: string } | null> {
+    const deleted = await this.redis.hdel(DRAGONS_KEY, dragonId);
 
-    if (dragonIndex === -1) return null;
-
-    database.splice(dragonIndex, 1);
+    if (deleted === 0) return null;
 
     return { message: 'Dragon deleted successfully' };
   }
