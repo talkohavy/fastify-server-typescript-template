@@ -1,4 +1,3 @@
-import cors from '@fastify/cors';
 import Fastify, { type FastifyInstance } from 'fastify';
 import type { AppOptions } from './types';
 import { AppFactory } from './lib/lucky-server';
@@ -10,12 +9,11 @@ import { routesWithBodyValidation } from './modules/routes-with-body-validation'
 import { SerializationExamplesModule } from './modules/serialization-examples/serialization-examples.module';
 import { UsersModule } from './modules/users';
 import { ValidationExamplesModule } from './modules/validation-examples';
+import { corsPlugin } from './plugins/cors';
 import { mongodbPlugin, postgresPlugin } from './plugins/database';
 import { errorHandlerPlugin } from './plugins/errorHandler.plugin';
 import { pathNotFoundPlugin } from './plugins/pathNotFound.plugin';
 import { redisPlugin } from './plugins/redis/redis.plugin';
-
-const allowedOrigins = ['http://localhost:3000'];
 
 export async function buildApp(options?: AppOptions) {
   const app: FastifyInstance = await Fastify(options);
@@ -24,26 +22,12 @@ export async function buildApp(options?: AppOptions) {
     connectionString: process.env.DB_CONNECTION_STRING!,
   });
 
-  await app.register(cors, {
-    origin: (origin, cb) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        //  Request from localhost will pass
-        cb(null, true);
-        return;
-      }
-      // Generate an error on other origins, disabling access
-      cb(new Error('Not allowed by CORS'), false);
-    },
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'], // Allowed HTTP methods
-    credentials: true, // <--- Required! When a client request has `include:'credentials'`, this option must be set to true. Otherwise, the request will be blocked.
-  });
-
   const appModule = new AppFactory(app);
 
   await appModule.registerPlugins([
     redisPlugin,
     mongodbPlugin,
-    // corsPlugin,
+    corsPlugin,
     // helmetPlugin,
     // requestIdPlugin,
     // bodyLimitPlugin,
