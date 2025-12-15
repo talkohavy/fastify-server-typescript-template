@@ -1,6 +1,7 @@
 import Fastify, { type FastifyInstance } from 'fastify';
 import type { AppOptions } from './types';
 import { AppFactory } from './lib/lucky-server';
+import { AuthenticationModule } from './modules/authentication';
 import { DragonsModule } from './modules/dragons';
 import { HealthCheckModule } from './modules/health-check';
 import ourFirstRoute from './modules/our-first-route';
@@ -34,7 +35,14 @@ export async function buildApp(options?: AppOptions) {
   ]);
 
   appModule.registerModules(
-    [HealthCheckModule, DragonsModule, UsersModule, ValidationExamplesModule, SerializationExamplesModule],
+    [
+      HealthCheckModule,
+      AuthenticationModule,
+      DragonsModule,
+      UsersModule,
+      ValidationExamplesModule,
+      SerializationExamplesModule,
+    ],
     // optimizedModules,
   );
 
