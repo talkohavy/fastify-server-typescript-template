@@ -33,8 +33,10 @@
     "@fastify/helmet": "^13.0.2",
     "@fastify/redis": "^7.1.0",
     "@fastify/sensible": "^6.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
     "fastify": "^5.0.0",
     "fastify-plugin": "^5.0.0",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.0.1",
     "pg": "^8.16.3"
   },
