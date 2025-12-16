@@ -43,7 +43,7 @@ export async function buildApp(options?: AppOptions) {
       ValidationExamplesModule,
       SerializationExamplesModule,
     ],
-    // optimizedModules,
+    // optimizedApp,
   );
 
   appModule.registerErrorHandler(errorHandlerPlugin);
