@@ -1,5 +1,12 @@
 export const API_URLS = {
   healthCheck: '/api/health-check',
+  // authentication
+  auth: '/api/auth',
+  authLogin: '/api/auth/login',
+  authLogout: '/api/auth/logout',
+  createTokens: '/api/auth/tokens',
+  verifyToken: '/api/auth/verify-token',
+  isPasswordValid: '/api/auth/is-password-valid',
   // users
   users: '/api/users',
   userById: '/api/users/:userId',
@@ -28,3 +35,12 @@ export const StatusCodes = {
   CONFLICT: 409,
   INTERNAL_ERROR: 500,
 } as const;
+
+/**
+ * Toggle between monolith and micro-services architecture.
+ * - `false`: Monolith mode - BackendModule (BFF) attaches all public routes,
+ *            domain modules only provide services.
+ * - `true`:  Micro-services mode - Each module runs as a standalone service
+ *            and attaches its own routes.
+ */
+export const IS_MICRO_SERVICES = false;
