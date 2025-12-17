@@ -1,5 +1,6 @@
 import Fastify, { type FastifyInstance } from 'fastify';
 import type { AppOptions } from './types';
+import { optimizedApp } from './common/constants';
 import { AppFactory } from './lib/lucky-server';
 import { AuthenticationModule } from './modules/authentication';
 import { DragonsModule } from './modules/dragons';
@@ -21,7 +22,7 @@ import { redisPlugin } from './plugins/redis/redis.plugin';
 export async function buildApp(options?: AppOptions) {
   const app: FastifyInstance = await Fastify(options);
 
-  const appModule = new AppFactory(app);
+  const appModule = new AppFactory(app, optimizedApp);
 
   await appModule.registerPlugins([
     configServicePlugin,
@@ -34,17 +35,14 @@ export async function buildApp(options?: AppOptions) {
     // requestIdPlugin,
   ]);
 
-  appModule.registerModules(
-    [
-      HealthCheckModule,
-      AuthenticationModule,
-      DragonsModule,
-      UsersModule,
-      ValidationExamplesModule,
-      SerializationExamplesModule,
-    ],
-    // optimizedApp,
-  );
+  appModule.registerModules([
+    HealthCheckModule,
+    AuthenticationModule,
+    DragonsModule,
+    UsersModule,
+    ValidationExamplesModule,
+    SerializationExamplesModule,
+  ]);
 
   appModule.registerErrorHandler(errorHandlerPlugin);
   appModule.registerPathNotFoundHandler(pathNotFoundPlugin);

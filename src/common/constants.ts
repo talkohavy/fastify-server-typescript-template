@@ -1,3 +1,5 @@
+import type { OptimizedApp } from './types';
+
 export const API_URLS = {
   healthCheck: '/api/health-check',
   // authentication
@@ -44,3 +46,24 @@ export const StatusCodes = {
  *            and attaches its own routes.
  */
 export const IS_MICRO_SERVICES = false;
+
+/**
+ * Pre-defined object structure for V8 shape optimization.
+ */
+export const optimizedApp: OptimizedApp = {
+  modules: {
+    AuthenticationModule: null as any,
+    UsersModule: null as any,
+    HealthCheckModule: null as any,
+    // BooksModule: null as any,
+    // FileUploadModule: null as any,
+  },
+  configService: null as any,
+  // redis: {
+  //   pub: null as any,
+  //   sub: null as any,
+  // },
+  pg: null as any,
+  logger: null as any,
+  // callContextService: null as any,
+};
