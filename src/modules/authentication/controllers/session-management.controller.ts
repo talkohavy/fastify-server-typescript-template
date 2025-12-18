@@ -5,9 +5,9 @@ import { API_URLS } from '../../../common/constants';
 export class SessionManagementController implements ControllerFactory {
   constructor(private readonly app: FastifyInstance) {}
 
-  private logout() {
-    this.app.get(API_URLS.authLogout, async (_req, _res) => {
-      this.app.log.info(`GET ${API_URLS.authLogout} - user logout`);
+  private logout(app: FastifyInstance) {
+    app.get(API_URLS.authLogout, async (_req, _res) => {
+      app.log.info(`GET ${API_URLS.authLogout} - user logout`);
 
       // maybe blacklist token here
 
@@ -16,6 +16,6 @@ export class SessionManagementController implements ControllerFactory {
   }
 
   registerRoutes() {
-    this.logout();
+    this.app.register(this.logout.bind(this));
   }
 }

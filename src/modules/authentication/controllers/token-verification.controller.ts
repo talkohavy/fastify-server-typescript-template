@@ -11,16 +11,16 @@ export class TokenVerificationController implements ControllerFactory {
     private readonly tokenVerificationService: TokenVerificationService,
   ) {}
 
-  private verifyToken() {
-    this.app.get(API_URLS.verifyToken, async (req, _res) => {
+  private verifyToken(app: FastifyInstance) {
+    app.get(API_URLS.verifyToken, async (req, _res) => {
       const { cookies } = req as any;
 
-      this.app.log.info(`GET ${API_URLS.verifyToken} - verify tokens`);
+      app.log.info(`GET ${API_URLS.verifyToken} - verify tokens`);
 
       const encodedToken = this.extractAccessTokenFromCookies(cookies);
 
       if (!encodedToken) {
-        this.app.log.error('No token found in cookies');
+        app.log.error('No token found in cookies');
         throw new UnauthorizedError('No token provided');
       }
 
@@ -38,6 +38,6 @@ export class TokenVerificationController implements ControllerFactory {
   }
 
   registerRoutes() {
-    this.verifyToken();
+    this.app.register(this.verifyToken.bind(this));
   }
 }
