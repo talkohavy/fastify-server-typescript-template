@@ -30,7 +30,7 @@ export async function buildApp(options?: AppOptions) {
     mongodbPlugin,
     corsPlugin,
     cookiePlugin,
-    // helmetPlugin, // <--- slows down the server by nearly 50$ !!!
+    // helmetPlugin, // <--- slows down the server by nearly 50% !!!
     // requestIdPlugin,
   ]);
 
