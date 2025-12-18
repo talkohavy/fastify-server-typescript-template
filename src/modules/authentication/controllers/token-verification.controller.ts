@@ -15,12 +15,12 @@ export class TokenVerificationController implements ControllerFactory {
     app.get(API_URLS.verifyToken, async (req, _res) => {
       const { cookies } = req as any;
 
-      app.log.info(`GET ${API_URLS.verifyToken} - verify tokens`);
+      app.logger.info(`GET ${API_URLS.verifyToken} - verify tokens`);
 
       const encodedToken = this.extractAccessTokenFromCookies(cookies);
 
       if (!encodedToken) {
-        app.log.error('No token found in cookies');
+        app.logger.error('No token found in cookies');
         throw new UnauthorizedError('No token provided');
       }
 

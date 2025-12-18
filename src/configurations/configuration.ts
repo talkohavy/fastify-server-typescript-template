@@ -1,4 +1,5 @@
-import type { Config } from './constants';
+import { LogLevel, type LogLevelValues } from '../lib/logger';
+import { Environment, type Config } from './constants';
 
 export function configuration(): Config {
   return {
@@ -26,6 +27,12 @@ export function configuration(): Config {
         domain: process.env.DOMAIN || 'localhost',
         maxAge: 24 * 60 * 60 * 1000, // 1 day
       },
+    },
+    logSettings: {
+      serviceName: 'my-awesome-server',
+      logLevel: (process.env.LOG_LEVEL || LogLevel.Debug) as LogLevelValues,
+      logEnvironment: Environment.Dev,
+      useColoredOutput: process.env.NODE_ENV !== 'production',
     },
   };
 }

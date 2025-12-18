@@ -1,3 +1,14 @@
+import type { LoggerSettings } from '../lib/logger';
+
+export const Environment = {
+  Prod: 'prod',
+  Dev: 'dev',
+} as const;
+
+type TypeOfEnvironment = typeof Environment;
+export type EnvironmentKeys = keyof TypeOfEnvironment;
+export type EnvironmentValues = TypeOfEnvironment[EnvironmentKeys];
+
 export const ConfigKeys = {
   Port: 'port',
   IsDev: 'isDev',
@@ -5,6 +16,7 @@ export const ConfigKeys = {
   AuthCookie: 'authCookie',
   Cookies: 'cookies',
   Jwt: 'jwt',
+  LogSettings: 'logSettings',
   Services: 'services',
 } as const;
 
@@ -18,6 +30,7 @@ export type Config = {
   [ConfigKeys.AuthCookie]: AuthCookieConfig;
   [ConfigKeys.Cookies]: CookiesConfig;
   [ConfigKeys.Jwt]: JwtConfig;
+  [ConfigKeys.LogSettings]: LoggerServiceSettings;
 };
 
 export type AuthCookieConfig = {
@@ -44,6 +57,11 @@ export type JwtConfig = {
   accessExpireTime: string;
   refreshExpireTime: string;
   issuer: string;
+};
+
+export type LoggerServiceSettings = LoggerSettings & {
+  serviceName?: string;
+  logEnvironment?: EnvironmentValues;
 };
 
 export const ServiceNames = {

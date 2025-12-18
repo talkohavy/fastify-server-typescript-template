@@ -17,6 +17,7 @@ import { cookiePlugin } from './plugins/cookie.plugin';
 import { corsPlugin } from './plugins/cors.plugin';
 import { mongodbPlugin, postgresPlugin } from './plugins/database';
 import { errorHandlerPlugin } from './plugins/errorHandler.plugin';
+import { loggerPlugin } from './plugins/logger.plugin';
 import { pathNotFoundPlugin } from './plugins/pathNotFound.plugin';
 import { redisPlugin } from './plugins/redis.plugin';
 
@@ -27,6 +28,7 @@ export async function buildApp(options?: AppOptions) {
 
   await appModule.registerPlugins([
     configServicePlugin,
+    loggerPlugin,
     redisPlugin,
     postgresPlugin,
     mongodbPlugin,

@@ -11,7 +11,7 @@ export default async function routesWithAbortCleanup(app: FastifyInstance, _opti
       console.log('request.raw.aborted:', request.raw.aborted);
       console.log('request.raw.destroyed:', request.raw.destroyed);
       if (request.raw.aborted) {
-        app.log.info('request closed');
+        app.logger.info('request closed');
       }
     });
 

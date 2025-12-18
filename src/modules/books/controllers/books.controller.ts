@@ -16,7 +16,7 @@ export class BooksController implements ControllerFactory {
       async (req, res) => {
         const { body } = req as any;
 
-        app.log.info(`POST ${API_URLS.books} - creating new book`);
+        app.logger.info(`POST ${API_URLS.books} - creating new book`);
 
         const newBook = await this.booksService.createBook(body);
 
@@ -28,7 +28,7 @@ export class BooksController implements ControllerFactory {
 
   private getBooks(app: FastifyInstance) {
     this.app.get(API_URLS.books, async (_req, _res) => {
-      app.log.info(`GET ${API_URLS.books} - fetching books`);
+      app.logger.info(`GET ${API_URLS.books} - fetching books`);
 
       const books = await this.booksService.getBooks();
 
@@ -40,14 +40,14 @@ export class BooksController implements ControllerFactory {
     this.app.get(API_URLS.bookById, async (req, res) => {
       const { params } = req as any;
 
-      this.app.log.info(`GET ${API_URLS.bookById} - fetching book by ID`);
+      this.app.logger.info(`GET ${API_URLS.bookById} - fetching book by ID`);
 
       const bookId = params.bookId!;
 
       const book = await this.booksService.getBookById(bookId);
 
       if (!book) {
-        app.log.error('Book not found', bookId);
+        app.logger.error('Book not found', bookId);
 
         res.status(StatusCodes.NOT_FOUND);
         return { message: 'Book not found' };
@@ -64,13 +64,13 @@ export class BooksController implements ControllerFactory {
       async (req, res) => {
         const { body, params } = req as any;
 
-        app.log.info(`PUT ${API_URLS.bookById} - updating book by ID`);
+        app.logger.info(`PUT ${API_URLS.bookById} - updating book by ID`);
 
         const bookId = params.bookId!;
         const updatedBook = await this.booksService.updateBook(bookId, body);
 
         if (!updatedBook) {
-          app.log.error('Book not found', bookId);
+          app.logger.error('Book not found', bookId);
 
           res.status(StatusCodes.NOT_FOUND);
           return { message: 'Book not found' };
@@ -85,13 +85,13 @@ export class BooksController implements ControllerFactory {
     this.app.delete(API_URLS.bookById, async (req, res) => {
       const { params } = req as any;
 
-      app.log.info(`DELETE ${API_URLS.bookById} - deleting book by ID`);
+      app.logger.info(`DELETE ${API_URLS.bookById} - deleting book by ID`);
 
       const bookId = params.bookId!;
       const deletedBook = await this.booksService.deleteBook(bookId);
 
       if (!deletedBook) {
-        app.log.error('Book not found', bookId);
+        app.logger.error('Book not found', bookId);
 
         res.status(StatusCodes.NOT_FOUND);
         return { message: 'Book not found' };

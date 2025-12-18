@@ -16,7 +16,7 @@ export class UserUtilitiesController implements ControllerFactory {
     app.get(API_URLS.getProfile, async (req, res) => {
       const { cookies } = req;
 
-      app.log.info(`GET ${API_URLS.getProfile} - get user profile`);
+      app.logger.info(`GET ${API_URLS.getProfile} - get user profile`);
 
       const token = this.extractAccessTokenFromCookies(cookies);
 

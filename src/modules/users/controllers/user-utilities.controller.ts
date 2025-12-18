@@ -29,7 +29,7 @@ export class UserUtilitiesController implements ControllerFactory {
       try {
         const { email } = req.body as GetUserByEmailBody;
 
-        app.log.info('POST /users/get-by-email - fetching user by email');
+        app.logger.info('POST /users/get-by-email - fetching user by email');
 
         const user = await this.userUtilitiesService.getUserByEmail(email);
 

@@ -13,7 +13,7 @@ export class DragonsController implements ControllerFactory {
     app.post(API_URLS.dragons, async (req, res) => {
       const { body } = req as any;
 
-      app.log.info(`POST ${API_URLS.dragons} - creating new dragon`);
+      app.logger.info(`POST ${API_URLS.dragons} - creating new dragon`);
 
       const newDragon = await this.dragonsAdapter.createDragon(body);
 
@@ -24,7 +24,7 @@ export class DragonsController implements ControllerFactory {
 
   private getDragons(app: FastifyInstance) {
     app.get(API_URLS.dragons, async (_req, _res) => {
-      app.log.info(`GET ${API_URLS.dragons} - fetching dragons`);
+      app.logger.info(`GET ${API_URLS.dragons} - fetching dragons`);
 
       const dragons = await this.dragonsAdapter.getDragons();
 
@@ -36,14 +36,14 @@ export class DragonsController implements ControllerFactory {
     app.get(API_URLS.dragonById, async (req, res) => {
       const { params } = req as any;
 
-      app.log.info(`GET ${API_URLS.dragonById} - fetching dragon by ID`);
+      app.logger.info(`GET ${API_URLS.dragonById} - fetching dragon by ID`);
 
       const dragonId = params.dragonId;
 
       const dragon = await this.dragonsAdapter.getDragonById(dragonId);
 
       if (!dragon) {
-        app.log.error('Dragon not found', dragonId);
+        app.logger.error('Dragon not found', dragonId);
 
         res.status(StatusCodes.NOT_FOUND);
         return { message: 'Dragon not found' };
@@ -57,13 +57,13 @@ export class DragonsController implements ControllerFactory {
     app.patch(API_URLS.dragonById, async (req, res) => {
       const { params, body } = req as any;
 
-      app.log.info(`PUT ${API_URLS.dragonById} - updating dragon by ID`);
+      app.logger.info(`PUT ${API_URLS.dragonById} - updating dragon by ID`);
 
       const dragonId = params.dragonId!;
       const updatedDragon = await this.dragonsAdapter.updateDragon(dragonId, body);
 
       if (!updatedDragon) {
-        app.log.error('Dragon not found', dragonId);
+        app.logger.error('Dragon not found', dragonId);
 
         res.status(StatusCodes.NOT_FOUND);
         return { message: 'Dragon not found' };
@@ -77,13 +77,13 @@ export class DragonsController implements ControllerFactory {
     app.delete(API_URLS.dragonById, async (req, res) => {
       const { params } = req as any;
 
-      app.log.info(`DELETE ${API_URLS.dragonById} - deleting dragon by ID`);
+      app.logger.info(`DELETE ${API_URLS.dragonById} - deleting dragon by ID`);
 
       const dragonId = params.dragonId!;
       const deletedDragon = await this.dragonsAdapter.deleteDragon(dragonId);
 
       if (!deletedDragon) {
-        app.log.error('Dragon not found', dragonId);
+        app.logger.error('Dragon not found', dragonId);
 
         res.status(StatusCodes.NOT_FOUND);
         return { message: 'Dragon not found' };

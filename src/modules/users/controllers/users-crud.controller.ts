@@ -29,7 +29,7 @@ export class UsersCrudController implements ControllerFactory {
     app.post(API_URLS.users, options, async (req, res) => {
       const body = req.body as CreateUserBody;
 
-      app.log.info(`POST ${API_URLS.users} - create new user`);
+      app.logger.info(`POST ${API_URLS.users} - create new user`);
 
       const user = await this.usersService.createUser(body);
 
@@ -43,7 +43,7 @@ export class UsersCrudController implements ControllerFactory {
     app.get(API_URLS.users, async (req, _res) => {
       const { query } = req;
 
-      app.log.info(`GET ${API_URLS.users} - get all users`);
+      app.logger.info(`GET ${API_URLS.users} - get all users`);
 
       const users = await this.usersService.getUsers(query);
 
@@ -67,7 +67,7 @@ export class UsersCrudController implements ControllerFactory {
     app.get(API_URLS.userById, options, async (req, _res) => {
       const { userId } = req.params as UserByIdParams;
 
-      app.log.info(`GET ${API_URLS.userById} - get user by id`);
+      app.logger.info(`GET ${API_URLS.userById} - get user by id`);
 
       const fetchedUser = await this.usersService.getUserById(userId);
 
@@ -98,7 +98,7 @@ export class UsersCrudController implements ControllerFactory {
     };
 
     app.patch(API_URLS.userById, options, async (req, _res) => {
-      app.log.info(`PATCH ${API_URLS.userById} - updating user by ID`);
+      app.logger.info(`PATCH ${API_URLS.userById} - updating user by ID`);
 
       const { userId } = req.params as UserByIdParams;
       const userData = req.body as UpdateUserBody;
@@ -125,7 +125,7 @@ export class UsersCrudController implements ControllerFactory {
     app.delete(API_URLS.userById, options, async (req, _res) => {
       const { userId } = req.params as UserByIdParams;
 
-      app.log.info(`DELETE ${API_URLS.userById} - delete user`);
+      app.logger.info(`DELETE ${API_URLS.userById} - delete user`);
 
       const result = await this.usersService.deleteUserById(userId);
 

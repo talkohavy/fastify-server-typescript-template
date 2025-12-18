@@ -29,13 +29,13 @@ export class PasswordManagementController implements ControllerFactory {
       try {
         const { hashedPassword: saltAndHashedPassword, password } = req.body as IsPasswordValidBody;
 
-        app.log.info(`POST ${API_URLS.isPasswordValid} - check if password is valid`);
+        app.logger.info(`POST ${API_URLS.isPasswordValid} - check if password is valid`);
 
         const isValid = await this.passwordManagementService.getIsPasswordValid(saltAndHashedPassword, password);
 
         return { isValid };
       } catch (error) {
-        app.log.error('Check password validity failed...', { error } as any);
+        app.logger.error('Check password validity failed...', { error } as any);
 
         throw new UnauthorizedError('Invalid credentials');
       }

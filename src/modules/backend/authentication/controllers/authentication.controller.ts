@@ -20,7 +20,7 @@ export class AuthenticationController implements ControllerFactory {
       try {
         const { body } = req as any;
 
-        app.log.info(`POST ${API_URLS.authLogin} - user login endpoint`);
+        app.logger.info(`POST ${API_URLS.authLogin} - user login endpoint`);
 
         const { email, password } = body;
 
@@ -62,7 +62,7 @@ export class AuthenticationController implements ControllerFactory {
         return user;
       } catch (error) {
         if (error instanceof UserNotFoundError) {
-          app.log.error('User not found:', error as any);
+          app.logger.error('User not found:', error as any);
           throw new BadRequestError('invalid credentials');
         }
 
@@ -73,7 +73,7 @@ export class AuthenticationController implements ControllerFactory {
 
   private logout(app: FastifyInstance) {
     app.post(API_URLS.authLogout, async (_req, res) => {
-      app.log.info(`POST ${API_URLS.authLogout} - user logout`);
+      app.logger.info(`POST ${API_URLS.authLogout} - user logout`);
 
       const { accessCookie, refreshCookie } = app.configService.get<CookiesConfig>(ConfigKeys.Cookies);
 

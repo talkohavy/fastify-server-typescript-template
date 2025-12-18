@@ -18,9 +18,9 @@ async function postgresPluggable(app: FastifyInstance): Promise<void> {
 
   try {
     await connection.connect();
-    app.log.info('✅ Successfully connected to PostgreSQL');
+    app.logger.info('✅ Successfully connected to PostgreSQL');
   } catch (error: any) {
-    app.log.error('❌ Failed to connect to PostgreSQL:', error);
+    app.logger.error('❌ Failed to connect to PostgreSQL:', error);
     throw error;
   }
 

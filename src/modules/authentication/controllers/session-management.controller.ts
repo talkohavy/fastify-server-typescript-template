@@ -7,7 +7,7 @@ export class SessionManagementController implements ControllerFactory {
 
   private logout(app: FastifyInstance) {
     app.get(API_URLS.authLogout, async (_req, _res) => {
-      app.log.info(`GET ${API_URLS.authLogout} - user logout`);
+      app.logger.info(`GET ${API_URLS.authLogout} - user logout`);
 
       // maybe blacklist token here
 
