@@ -39,15 +39,6 @@ export const StatusCodes = {
 } as const;
 
 /**
- * Toggle between monolith and micro-services architecture.
- * - `false`: Monolith mode - BackendModule (BFF) attaches all public routes,
- *            domain modules only provide services.
- * - `true`:  Micro-services mode - Each module runs as a standalone service
- *            and attaches its own routes.
- */
-export const IS_MICRO_SERVICES = false;
-
-/**
  * Pre-defined object structure for V8 shape optimization.
  */
 export const optimizedApp: OptimizedApp = {
@@ -59,3 +50,12 @@ export const optimizedApp: OptimizedApp = {
     // FileUploadModule: null as any,
   },
 };
+
+/**
+ * Toggle between monolith and micro-services architecture.
+ * - `false`: Monolith mode - BackendModule (BFF) attaches all public routes,
+ *            domain modules only provide services.
+ * - `true`:  Micro-services mode - Each module runs as a standalone service
+ *            and attaches its own routes.
+ */
+export const IS_STANDALONE_MICRO_SERVICES = false;
