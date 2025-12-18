@@ -5,7 +5,6 @@ import { AppFactory } from './lib/lucky-server';
 import { AuthenticationModule } from './modules/authentication';
 import { DragonsModule } from './modules/dragons';
 import { HealthCheckModule } from './modules/health-check';
-import ourFirstRoute from './modules/our-first-route';
 import routesWithAbortCleanup from './modules/routes-with-abort-cleanup';
 import { routesWithBodyValidation } from './modules/routes-with-body-validation';
 import { SerializationExamplesModule } from './modules/serialization-examples/serialization-examples.module';
@@ -47,7 +46,6 @@ export async function buildApp(options?: AppOptions) {
   appModule.registerErrorHandler(errorHandlerPlugin);
   appModule.registerPathNotFoundHandler(pathNotFoundPlugin);
 
-  app.register(ourFirstRoute);
   app.register(routesWithBodyValidation);
   app.register(routesWithAbortCleanup);
 
