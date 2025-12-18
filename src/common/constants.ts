@@ -46,6 +46,7 @@ export const optimizedApp: OptimizedApp = {
     AuthenticationModule: null as any,
     UsersModule: null as any,
     HealthCheckModule: null as any,
+    DragonsModule: null as any,
     // BooksModule: null as any,
     // FileUploadModule: null as any,
   },
