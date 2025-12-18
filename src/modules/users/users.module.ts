@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import type { IUsersRepository } from './repositories/interfaces/users.repository.base';
+import { IS_STANDALONE_MICRO_SERVICES } from '../../common/constants';
 import { UserUtilitiesController } from './controllers/user-utilities.controller';
 import { UsersCrudController } from './controllers/users-crud.controller';
 import { UsersController } from './controllers/users.controller';
@@ -23,9 +24,6 @@ export class UsersModule {
     // this.usersRepository = new UsersMongoRepository(this.app.mongo);
     this.usersRepository = new UsersPostgresRepository(this.app.pg);
 
-    // For MongoDB, use:
-    // this.usersRepository = new UsersMongoRepository(this.app.mongo);
-
     // Initialize helper services
     const fieldScreeningService = new FieldScreeningService(['hashed_password'], ['nickname']);
 
@@ -33,7 +31,10 @@ export class UsersModule {
     this.userUtilitiesService = new UserUtilitiesService(this.usersRepository, fieldScreeningService);
     this.usersCrudService = new UsersCrudService(this.usersRepository);
 
-    this.attachControllers();
+    // Only attach routes if running as a standalone micro-service
+    if (IS_STANDALONE_MICRO_SERVICES) {
+      this.attachControllers();
+    }
   }
 
   private attachControllers(): void {
@@ -45,11 +46,10 @@ export class UsersModule {
     usersController.registerRoutes();
   }
 
-  getUserUtilitiesService(): UserUtilitiesService {
-    return this.userUtilitiesService;
-  }
-
-  getUsersCrudService(): UsersCrudService {
-    return this.usersCrudService;
+  get services() {
+    return {
+      usersCrudService: this.usersCrudService,
+      userUtilitiesService: this.userUtilitiesService,
+    };
   }
 }
