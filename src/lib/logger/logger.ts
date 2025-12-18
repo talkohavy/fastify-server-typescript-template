@@ -9,6 +9,9 @@ export class Logger implements ILogger {
   private readonly fixedKeys: Record<string, any>;
   private readonly globalLogLevelValue: number;
 
+  /** The current log level as a string (required by Fastify) */
+  public readonly level: LogLevelValues;
+
   public constructor(props: LoggerConstructorProps) {
     const { settings, fixedKeys = {} } = props;
 
@@ -19,10 +22,30 @@ export class Logger implements ILogger {
       }
     }
 
-    this.globalLogLevelValue = LogLevelToNumber[settings?.logLevel ?? LogLevel.Info];
+    this.level = settings?.logLevel ?? LogLevel.Info;
+    this.globalLogLevelValue = LogLevelToNumber[this.level];
 
     this.settings = settings;
     this.fixedKeys = fixedKeys;
+  }
+
+  /**
+   * Creates a child logger with additional fixed bindings.
+   * Used by Fastify to create request-scoped loggers with reqId, etc.
+   */
+  child(bindings: Record<string, any>): Logger {
+    return new Logger({
+      settings: this.settings,
+      fixedKeys: { ...this.fixedKeys, ...bindings },
+    });
+  }
+
+  trace(message: string, data?: any) {
+    if (!this.shouldLog(LogLevel.Trace)) return;
+
+    const logMetadata = this.enrichLogMetadata(message, data, LogLevel.Trace);
+
+    this.logMe(logMetadata);
   }
 
   debug(message: string, data?: any) {
@@ -71,6 +94,14 @@ export class Logger implements ILogger {
     const logMetadata = this.enrichLogMetadata(message, data, LogLevel.Fatal);
 
     this.logMe(logMetadata);
+  }
+
+  /**
+   * Silent log level - does nothing (no-op).
+   * Required by Fastify/Pino interface.
+   */
+  silent(_message: string, _data?: any) {
+    // No-op - silent means don't log anything
   }
 
   private logMe(logMetadata: string): void {

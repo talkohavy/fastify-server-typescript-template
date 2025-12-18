@@ -1,3 +1,4 @@
+import type { LogLevelValues } from './logic/constants';
 import type { LoggerSettings } from './types';
 
 export type LoggerConstructorProps = {
@@ -11,10 +12,21 @@ export type LoggerConstructorProps = {
 };
 
 export interface ILogger {
+  /** The current log level as a string */
+  level: LogLevelValues;
+
+  trace(message: string, data?: any): void;
   debug(message: string, data?: any): void;
   log(message: string, data?: any): void;
   info(message: string, data?: any): void;
   warn(message: string, data?: any): void;
   error(message: string, data?: any): void;
   fatal(message: string, data?: any): void;
+  silent(message: string, data?: any): void;
+
+  /**
+   * Creates a child logger with additional fixed bindings.
+   * Used by Fastify to create request-scoped loggers with reqId, etc.
+   */
+  child(bindings: Record<string, any>): ILogger;
 }
