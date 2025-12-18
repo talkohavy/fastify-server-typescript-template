@@ -2,6 +2,7 @@
   "extends": "fastify-tsconfig",
   "compilerOptions": {
     "outDir": "dist",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"], // adding the "DOM" library helps vs-code to recognize the window & document objects. Specify a set of bundled library declaration files that describe the target runtime environment.
     "sourceMap": true
   },
   "include": ["src/**/*.ts"]
