@@ -1,4 +1,5 @@
 import type { FastifyInstance } from 'fastify';
+import { randomBytes } from 'crypto';
 import type { ControllerFactory } from '../../../../lib/lucky-server';
 import type { IAuthAdapter } from '../../authentication/adapters/auth.adapter.interface';
 import type { IUsersAdapter } from '../adapters/users.adapter.interface';
@@ -19,7 +20,15 @@ export class UsersCrudController implements ControllerFactory {
 
       app.logger.info(`POST ${API_URLS.users} - create new user`);
 
-      const user = await this.usersAdapter.createUser(body);
+      // Step 1: Generate salt and hash password via auth adapter
+      const salt = randomBytes(16).toString('hex');
+      const hashedPassword = await this.authAdapter.generateHashedPassword(body.password, salt);
+      const saltAndHashedPassword = `${salt}:${hashedPassword}`;
+
+      const updatedPayload = { ...body, password: saltAndHashedPassword };
+
+      // Step 2: Create user with hashed password
+      const user = await this.usersAdapter.createUser(updatedPayload);
 
       res.status(StatusCodes.CREATED);
       return user;
