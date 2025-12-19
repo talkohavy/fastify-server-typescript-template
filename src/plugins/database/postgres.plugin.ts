@@ -1,5 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
+import { ConfigKeys, type PostgresConfig } from '../../configurations';
 import { PostgresConnection } from '../../lib/database/postgres';
 
 export const postgresPlugin = fp(postgresPluggable, {
@@ -7,8 +8,12 @@ export const postgresPlugin = fp(postgresPluggable, {
   fastify: '5.x',
 });
 
+/**
+ * @dependencies
+ * - config-service plugin
+ */
 async function postgresPluggable(app: FastifyInstance): Promise<void> {
-  const connectionString = process.env.DB_CONNECTION_STRING as string;
+  const { connectionString } = app.configService.get<PostgresConfig>(ConfigKeys.Postgres);
 
   if (!connectionString) {
     throw new Error('PostgreSQL connection string is required');

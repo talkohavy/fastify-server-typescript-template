@@ -34,5 +34,17 @@ export function configuration(): Config {
       logEnvironment: Environment.Dev,
       useColoredOutput: process.env.NODE_ENV !== 'production',
     },
+    redis: {
+      connectionString: process.env.REDIS_CONNECTION_STRING as string,
+    },
+    postgres: {
+      connectionString: process.env.POSTGRES_CONNECTION_STRING as string,
+    },
+    mongodb: {
+      connectionString: process.env.MONGODB_CONNECTION_STRING as string,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    },
   };
 }

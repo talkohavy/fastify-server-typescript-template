@@ -1,25 +1,20 @@
 import type { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 import mongoose from 'mongoose';
+import { ConfigKeys, type MongoDBConfig } from '../../configurations';
 
 export const mongodbPlugin = fp(mongodbPluggable, {
   name: 'fastify-mongodb',
   fastify: '5.x',
 });
 
-// export type MongoDBPluginOptions = {
-//   connectionString: string;
-//   maxPoolSize?: number;
-//   serverSelectionTimeoutMS?: number;
-//   socketTimeoutMS?: number;
-// };
-// async function mongodbPluggable(fastify: FastifyInstance, options: MongoDBPluginOptions): Promise<void> {
-
-async function mongodbPluggable(fastify: FastifyInstance): Promise<void> {
-  const connectionString = process.env.MONGODB_CONNECTION_STRING as string;
-  const maxPoolSize = 10;
-  const serverSelectionTimeoutMS = 5000;
-  const socketTimeoutMS = 45000;
+/**
+ * @dependencies
+ * - config-service plugin
+ */
+async function mongodbPluggable(app: FastifyInstance): Promise<void> {
+  const { connectionString, maxPoolSize, serverSelectionTimeoutMS, socketTimeoutMS } =
+    app.configService.get<MongoDBConfig>(ConfigKeys.MongoDB);
 
   if (!connectionString) {
     throw new Error('MongoDB connection string is required');
@@ -31,17 +26,17 @@ async function mongodbPluggable(fastify: FastifyInstance): Promise<void> {
       serverSelectionTimeoutMS,
       socketTimeoutMS,
     });
-    fastify.log.info('✅ Successfully connected to MongoDB');
+    app.log.info('✅ Successfully connected to MongoDB');
   } catch (error: any) {
-    fastify.log.error('❌ Failed to connect to MongoDB:', error);
+    app.log.error('❌ Failed to connect to MongoDB:', error);
     throw error;
   }
 
   // Decorate fastify instance - accessible as fastify.mongo
-  fastify.decorate('mongo', mongoose);
+  app.decorate('mongo', mongoose);
 
   // Graceful shutdown - Fastify calls this automatically on close
-  fastify.addHook('onClose', async (instance) => {
+  app.addHook('onClose', async (instance) => {
     try {
       await mongoose.disconnect();
       instance.log.info('📴 MongoDB connection closed');

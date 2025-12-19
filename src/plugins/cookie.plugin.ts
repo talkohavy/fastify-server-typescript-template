@@ -3,7 +3,7 @@ import fastifyCookie, { type FastifyCookieOptions } from '@fastify/cookie';
 
 export async function cookiePlugin(app: FastifyInstance) {
   app.register(fastifyCookie, {
-    secret: 'my-secret', // for cookies signature
+    // secret: 'my-secret', // <--- for cookies signature
     hook: 'onRequest', // set to false to disable cookie autoparsing or set autoparsing on any of the following hooks: 'onRequest', 'preParsing', 'preHandler', 'preValidation'. default: 'onRequest'
     parseOptions: {
       httpOnly: true,

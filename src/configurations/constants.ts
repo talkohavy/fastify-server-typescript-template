@@ -18,6 +18,9 @@ export const ConfigKeys = {
   Jwt: 'jwt',
   LogSettings: 'logSettings',
   Services: 'services',
+  Redis: 'redis',
+  Postgres: 'postgres',
+  MongoDB: 'mongodb',
 } as const;
 
 type TypeOfConfigKeys = typeof ConfigKeys;
@@ -31,6 +34,9 @@ export type Config = {
   [ConfigKeys.Cookies]: CookiesConfig;
   [ConfigKeys.Jwt]: JwtConfig;
   [ConfigKeys.LogSettings]: LoggerServiceSettings;
+  [ConfigKeys.Redis]: RedisConfig;
+  [ConfigKeys.Postgres]: PostgresConfig;
+  [ConfigKeys.MongoDB]: MongoDBConfig;
 };
 
 export type AuthCookieConfig = {
@@ -62,6 +68,21 @@ export type JwtConfig = {
 export type LoggerServiceSettings = LoggerSettings & {
   serviceName?: string;
   logEnvironment?: EnvironmentValues;
+};
+
+export type RedisConfig = {
+  connectionString: string;
+};
+
+export type PostgresConfig = {
+  connectionString: string;
+};
+
+export type MongoDBConfig = {
+  connectionString: string;
+  maxPoolSize: number;
+  serverSelectionTimeoutMS: number;
+  socketTimeoutMS: number;
 };
 
 export const ServiceNames = {

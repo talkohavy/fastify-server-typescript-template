@@ -1,12 +1,17 @@
 import type { FastifyInstance } from 'fastify';
 import fastifyRedisPlugin from '@fastify/redis';
+import { ConfigKeys, type RedisConfig } from '../configurations';
 
+/**
+ * @dependencies
+ * - config-service plugin
+ */
 export async function redisPlugin(app: FastifyInstance): Promise<void> {
-  const url = process.env.REDIS_CONNECTION_STRING as string;
+  const { connectionString } = app.configService.get<RedisConfig>(ConfigKeys.Redis);
 
-  if (!url) {
-    throw new Error('REDIS_CONNECTION_STRING is not set');
+  if (!connectionString) {
+    throw new Error('Redis connection string is required');
   }
 
-  await app.register(fastifyRedisPlugin, { url, closeClient: true });
+  await app.register(fastifyRedisPlugin, { url: connectionString, closeClient: true });
 }
