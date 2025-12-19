@@ -17,33 +17,7 @@ const ALLOWED_SORT_COLUMNS = new Set(['id', 'email', 'nickname', 'created_at', '
 const ALLOWED_FILTER_COLUMNS = new Set(['id', 'email', 'nickname', 'is_active']);
 
 export class UsersPostgresRepository implements IUsersRepository {
-  constructor(private readonly pgClient: Client) {
-    this.initializeTable();
-  }
-
-  private async initializeTable(): Promise<void> {
-    try {
-      const createTableQuery = `
-        CREATE TABLE IF NOT EXISTS public.users
-        (
-          id SERIAL PRIMARY KEY,
-          email VARCHAR(255) UNIQUE NOT NULL,
-          nickname VARCHAR(255),
-          hashed_password VARCHAR(255) NOT NULL,
-          date_of_birth BIGINT,
-          is_active BOOLEAN DEFAULT true,
-          created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-          updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        );
-      `;
-
-      await this.pgClient.query(createTableQuery);
-      console.log('✅ Users table initialized successfully');
-    } catch (error) {
-      console.error('❌ Error initializing users table:', error);
-      throw error;
-    }
-  }
+  constructor(private readonly pgClient: Client) {}
 
   async getUserByEmail(email: string, options: GetUserByEmailOptions = {}): Promise<DatabaseUser | null> {
     const fields = options.fields || ['*'];
