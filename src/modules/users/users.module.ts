@@ -25,7 +25,10 @@ export class UsersModule {
     this.usersRepository = new UsersPostgresRepository(this.app.pg);
 
     // Initialize helper services
-    const fieldScreeningService = new FieldScreeningService(['hashed_password'], ['nickname']);
+    const fieldScreeningService = new FieldScreeningService(
+      ['hashed_password'],
+      ['id', 'email', 'nickname', 'date_of_birth'],
+    );
 
     // Initialize main services
     this.userUtilitiesService = new UserUtilitiesService(this.usersRepository, fieldScreeningService);
