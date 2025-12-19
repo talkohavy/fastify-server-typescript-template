@@ -27,9 +27,11 @@ export class PasswordManagementController implements ControllerFactory {
 
     app.post(API_URLS.isPasswordValid, options, async (req, _res) => {
       try {
-        const { hashedPassword: saltAndHashedPassword, password } = req.body as IsPasswordValidBody;
+        const { body } = req;
 
         app.logger.info(`POST ${API_URLS.isPasswordValid} - check if password is valid`);
+
+        const { hashedPassword: saltAndHashedPassword, password } = body as IsPasswordValidBody;
 
         const isValid = await this.passwordManagementService.getIsPasswordValid(saltAndHashedPassword, password);
 

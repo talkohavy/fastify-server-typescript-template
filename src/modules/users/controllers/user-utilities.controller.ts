@@ -27,9 +27,11 @@ export class UserUtilitiesController implements ControllerFactory {
 
     app.post(API_URLS.getUserByEmail, options, async (req, _res) => {
       try {
-        const { email } = req.body as GetUserByEmailBody;
+        const { body } = req;
 
         app.logger.info('POST /users/get-by-email - fetching user by email');
+
+        const { email } = body as GetUserByEmailBody;
 
         const user = await this.userUtilitiesService.getUserByEmail(email);
 

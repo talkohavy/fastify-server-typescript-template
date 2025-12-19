@@ -27,11 +27,11 @@ export class UsersCrudController implements ControllerFactory {
     };
 
     app.post(API_URLS.users, options, async (req, res) => {
-      const body = req.body as CreateUserBody;
+      const { body } = req;
 
       app.logger.info(`POST ${API_URLS.users} - create new user`);
 
-      const user = await this.usersService.createUser(body);
+      const user = await this.usersService.createUser(body as CreateUserBody);
 
       res.status(StatusCodes.CREATED);
 
@@ -65,9 +65,11 @@ export class UsersCrudController implements ControllerFactory {
     };
 
     app.get(API_URLS.userById, options, async (req, _res) => {
-      const { userId } = req.params as UserByIdParams;
+      const { params } = req;
 
       app.logger.info(`GET ${API_URLS.userById} - get user by id`);
+
+      const { userId } = params as UserByIdParams;
 
       const fetchedUser = await this.usersService.getUserById(userId);
 
@@ -98,12 +100,13 @@ export class UsersCrudController implements ControllerFactory {
     };
 
     app.patch(API_URLS.userById, options, async (req, _res) => {
+      const { params, body } = req;
+
       app.logger.info(`PATCH ${API_URLS.userById} - updating user by ID`);
 
-      const { userId } = req.params as UserByIdParams;
-      const userData = req.body as UpdateUserBody;
+      const { userId } = params as UserByIdParams;
 
-      const updatedUser = await this.usersService.updateUserById(userId, userData);
+      const updatedUser = await this.usersService.updateUserById(userId, body as UpdateUserBody);
 
       return updatedUser;
     });
@@ -123,9 +126,11 @@ export class UsersCrudController implements ControllerFactory {
     };
 
     app.delete(API_URLS.userById, options, async (req, _res) => {
-      const { userId } = req.params as UserByIdParams;
+      const { params } = req;
 
       app.logger.info(`DELETE ${API_URLS.userById} - delete user`);
+
+      const { userId } = params as UserByIdParams;
 
       const result = await this.usersService.deleteUserById(userId);
 

@@ -51,9 +51,9 @@ export class UsersCrudController implements ControllerFactory {
     app.get(API_URLS.userById, async (req, _res) => {
       const { params } = req as any;
 
-      const userId = params.userId as string;
-
       app.logger.info(`GET ${API_URLS.userById} - get user by id`);
+
+      const userId = params.userId as string;
 
       const fetchedUser = await this.usersAdapter.getUserById(userId);
 
@@ -87,9 +87,9 @@ export class UsersCrudController implements ControllerFactory {
     app.delete(API_URLS.userById, async (req, _res) => {
       const { params, cookies } = req as any;
 
-      const id = params.userId;
-
       app.logger.info(`DELETE ${API_URLS.userById} - delete user`);
+
+      const id = params.userId;
 
       const token = this.extractAccessTokenFromCookies(cookies);
 

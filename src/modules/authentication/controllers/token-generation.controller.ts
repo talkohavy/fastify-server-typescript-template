@@ -24,9 +24,11 @@ export class TokenGenerationController implements ControllerFactory {
     };
 
     app.post(API_URLS.createTokens, options, async (req, _res) => {
-      const { userId } = req.body as CreateTokensBody;
+      const { body } = req;
 
       app.logger.info(`POST ${API_URLS.createTokens} - create tokens`);
+
+      const { userId } = body as CreateTokensBody;
 
       const tokens = await this.tokenGenerationService.createTokens(userId);
 

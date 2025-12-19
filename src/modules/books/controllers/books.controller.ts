@@ -46,7 +46,7 @@ export class BooksController implements ControllerFactory {
 
       this.app.logger.info(`GET ${API_URLS.bookById} - fetching book by ID`);
 
-      const bookId = params.bookId!;
+      const bookId = params.bookId;
 
       const book = await this.booksService.getBookById(bookId);
 
