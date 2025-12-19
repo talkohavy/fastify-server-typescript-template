@@ -17,6 +17,7 @@ declare module 'fastify' {
   export interface FastifyRequest {
     helloRequest: string;
     foo: any;
+    requestId: string;
   }
 
   export interface FastifyReply {
