@@ -1,3 +1,5 @@
+import { COLORS } from 'color-my-json';
+import os from 'os';
 import { buildApp } from './app';
 import { ConfigKeys } from './configurations';
 
@@ -9,7 +11,8 @@ async function startServer() {
 
     const PORT = app.configService.get<number>(ConfigKeys.Port);
 
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`${COLORS.green}${os.EOL}✨ Server is running on port ${PORT} 🚀${os.EOL}${COLORS.stop}`);
+    console.log(`${COLORS.green}Open in browser: ${COLORS.blue}http://localhost:${PORT}${COLORS.stop}`);
   } catch (error: any) {
     app.logger.error(error.message, { error });
     process.exit(1);
