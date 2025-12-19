@@ -1,6 +1,8 @@
 import type { FastifyInstance } from 'fastify';
 import fp from 'fastify-plugin';
 import { ConfigKeys, type PostgresConfig } from '../../configurations';
+import { runAllMigrations } from '../../database/postgres/migrations';
+import { runAllSeeds } from '../../database/postgres/seeds';
 import { PostgresConnection } from '../../lib/database/postgres';
 
 export const postgresPlugin = fp(postgresPluggable, {
@@ -29,7 +31,15 @@ async function postgresPluggable(app: FastifyInstance): Promise<void> {
     throw error;
   }
 
-  app.decorate('pg', connection.getClient());
+  const pgClient = connection.getClient();
+
+  app.decorate('pg', pgClient);
+
+  // Run migrations and seeds
+  if (process.env.POSTGRES_SHOULD_MIGRATE) {
+    await runAllMigrations(pgClient);
+    await runAllSeeds(pgClient, { users: { skipIfExists: false, clearBeforeSeeding: true } });
+  }
 
   // Graceful shutdown - Fastify calls this automatically on close
   app.addHook('onClose', async (instance) => {

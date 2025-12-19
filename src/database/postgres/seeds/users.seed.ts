@@ -1,5 +1,5 @@
 import type { Client } from 'pg';
-import { createUsersTable, USERS_TABLE_NAME } from '../migrations/users.migration';
+import { USERS_TABLE_NAME } from '../migrations';
 
 const DUMMY_USERS = [
   { email: 'john.doe@example.com', nickname: 'johnd', dateOfBirth: 631152000000 },
@@ -48,9 +48,6 @@ export type SeedUsersOptions = {
  */
 export async function seedUsers(pgClient: Client, options: SeedUsersOptions = {}): Promise<number> {
   const { skipIfExists = true, clearBeforeSeeding = false } = options;
-
-  // Ensure table exists
-  await createUsersTable(pgClient);
 
   // Check if users already exist
   if (skipIfExists && !clearBeforeSeeding) {
