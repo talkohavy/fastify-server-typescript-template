@@ -18,7 +18,7 @@ export class BooksController implements ControllerFactory {
       },
     };
 
-    this.app.post(API_URLS.books, createBookOptions, async (req, res) => {
+    app.post(API_URLS.books, createBookOptions, async (req, res) => {
       const { body } = req as any;
 
       app.logger.info(`POST ${API_URLS.books} - creating new book`);
@@ -31,7 +31,7 @@ export class BooksController implements ControllerFactory {
   }
 
   private getBooks(app: FastifyInstance) {
-    this.app.get(API_URLS.books, async (_req, _res) => {
+    app.get(API_URLS.books, async (_req, _res) => {
       app.logger.info(`GET ${API_URLS.books} - fetching books`);
 
       const books = await this.booksAdapter.getBooks();
@@ -41,10 +41,10 @@ export class BooksController implements ControllerFactory {
   }
 
   private getBookById(app: FastifyInstance) {
-    this.app.get(API_URLS.bookById, async (req, res) => {
+    app.get(API_URLS.bookById, async (req, res) => {
       const { params } = req as any;
 
-      this.app.logger.info(`GET ${API_URLS.bookById} - fetching book by ID`);
+      app.logger.info(`GET ${API_URLS.bookById} - fetching book by ID`);
 
       const bookId = params.bookId!;
 
@@ -68,7 +68,7 @@ export class BooksController implements ControllerFactory {
       },
     };
 
-    this.app.patch(API_URLS.bookById, updateBookOptions, async (req, res) => {
+    app.patch(API_URLS.bookById, updateBookOptions, async (req, res) => {
       const { body, params } = req as any;
 
       app.logger.info(`PATCH ${API_URLS.bookById} - updating book by ID`);
@@ -88,7 +88,7 @@ export class BooksController implements ControllerFactory {
   }
 
   private deleteBook(app: FastifyInstance) {
-    this.app.delete(API_URLS.bookById, async (req, res) => {
+    app.delete(API_URLS.bookById, async (req, res) => {
       const { params } = req as any;
 
       app.logger.info(`DELETE ${API_URLS.bookById} - deleting book by ID`);
