@@ -35,9 +35,9 @@ async function postgresPluggable(app: FastifyInstance): Promise<void> {
   app.addHook('onClose', async (instance) => {
     try {
       await connection.disconnect();
-      instance.log.info('📴 PostgreSQL connection closed');
+      instance.logger.info('📴 PostgreSQL connection closed');
     } catch (error: any) {
-      instance.log.error('❌ Error closing PostgreSQL connection:', error);
+      instance.logger.error('❌ Error closing PostgreSQL connection:', error);
     }
   });
 }

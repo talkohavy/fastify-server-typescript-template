@@ -26,9 +26,9 @@ async function mongodbPluggable(app: FastifyInstance): Promise<void> {
       serverSelectionTimeoutMS,
       socketTimeoutMS,
     });
-    app.log.info('✅ Successfully connected to MongoDB');
+    app.logger.info('✅ Successfully connected to MongoDB');
   } catch (error: any) {
-    app.log.error('❌ Failed to connect to MongoDB:', error);
+    app.logger.error('❌ Failed to connect to MongoDB:', error);
     throw error;
   }
 
@@ -39,9 +39,9 @@ async function mongodbPluggable(app: FastifyInstance): Promise<void> {
   app.addHook('onClose', async (instance) => {
     try {
       await mongoose.disconnect();
-      instance.log.info('📴 MongoDB connection closed');
+      instance.logger.info('📴 MongoDB connection closed');
     } catch (error: any) {
-      instance.log.error('❌ Error closing MongoDB connection:', error);
+      instance.logger.error('❌ Error closing MongoDB connection:', error);
     }
   });
 }
