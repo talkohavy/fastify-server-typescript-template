@@ -96,3 +96,8 @@ export const DEFAULT_PAGINATION = {
   limit: 10,
   sortOrder: 'desc' as const,
 } as const;
+
+/**
+ * Maximum allowed limit to prevent resource exhaustion attacks
+ */
+export const MAX_PAGINATION_LIMIT = 100;
