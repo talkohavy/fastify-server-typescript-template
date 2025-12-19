@@ -12,6 +12,7 @@ import { routesWithBodyValidation } from './modules/routes-with-body-validation'
 import { SerializationExamplesModule } from './modules/serialization-examples/serialization-examples.module';
 import { UsersModule } from './modules/users';
 import { ValidationExamplesModule } from './modules/validation-examples';
+import { addIdToRequestPlugin } from './plugins/addIdToRequest.plugin';
 import { configServicePlugin } from './plugins/config-service.plugin';
 import { cookiePlugin } from './plugins/cookie.plugin';
 import { corsPlugin } from './plugins/cors.plugin';
@@ -21,7 +22,6 @@ import { incomingRequestLoggerPlugin } from './plugins/incomingRequestLogger/inc
 import { loggerPlugin } from './plugins/logger.plugin';
 import { pathNotFoundPlugin } from './plugins/pathNotFound.plugin';
 import { redisPlugin } from './plugins/redis.plugin';
-import { requestIdPlugin } from './plugins/requestId.plugin';
 
 export async function buildApp(options?: AppOptions) {
   const app: FastifyInstance = await Fastify(options);
@@ -30,7 +30,7 @@ export async function buildApp(options?: AppOptions) {
 
   await appModule.registerPlugins([
     configServicePlugin,
-    requestIdPlugin,
+    addIdToRequestPlugin,
     loggerPlugin,
     incomingRequestLoggerPlugin,
     redisPlugin,

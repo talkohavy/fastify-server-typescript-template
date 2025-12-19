@@ -11,7 +11,7 @@ const REQUEST_ID_HEADER = 'x-request-id';
  * 3. Wraps the entire request lifecycle in AsyncLocalStorage context
  *    so that the requestId is automatically available in all logs
  */
-export function requestIdPlugin(app: FastifyInstance) {
+export function addIdToRequestPlugin(app: FastifyInstance) {
   app.addHook('preHandler', (request, reply, done) => {
     // Use the x-request-id header if provided, otherwise generate a new UUID
     const requestId = (request.headers[REQUEST_ID_HEADER] as string) || randomUUID();
