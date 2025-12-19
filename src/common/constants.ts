@@ -87,3 +87,12 @@ export const optimizedApp: OptimizedApp = {
  *            and attaches its own routes.
  */
 export const IS_STANDALONE_MICRO_SERVICES = false;
+
+/**
+ * Default pagination values
+ */
+export const DEFAULT_PAGINATION = {
+  page: 1,
+  limit: 10,
+  sortOrder: 'desc' as const,
+} as const;

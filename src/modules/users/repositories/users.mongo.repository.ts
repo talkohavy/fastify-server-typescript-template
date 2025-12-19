@@ -1,4 +1,5 @@
 import { type ApplyBasicCreateCasting, type QueryFilter, type Mongoose, Types } from 'mongoose';
+import type { PaginatedResult } from '../../../common/types';
 import type { DatabaseUser } from '../types';
 import type { IUsersRepository } from './interfaces/users.repository.base';
 import type {
@@ -8,6 +9,9 @@ import type {
   UpdateUserDto,
   GetUserByEmailOptions,
 } from './interfaces/users.repository.interface';
+import { DEFAULT_PAGINATION } from '../../../common/constants';
+import { calculateOffset } from '../../../common/utils/pagination/calculateOffset';
+import { createPaginationMeta } from '../../../common/utils/pagination/createPaginationMeta';
 import { UserModel } from '../../../database/mongo/models/user/user.model';
 
 const { ObjectId } = Types;
@@ -39,29 +43,35 @@ export class UsersMongoRepository implements IUsersRepository {
     return userResult;
   }
 
-  async getUsers(props?: GetUsersProps): Promise<Array<DatabaseUser>> {
-    let query = UserModel.find(props?.filter || {});
+  async getUsers(props?: GetUsersProps): Promise<PaginatedResult<DatabaseUser>> {
+    const { filter = {}, pagination } = props || {};
+    const {
+      page = DEFAULT_PAGINATION.page,
+      limit = DEFAULT_PAGINATION.limit,
+      sortOrder = DEFAULT_PAGINATION.sortOrder,
+      sortBy = '_id',
+    } = pagination || {};
 
-    if (props?.options?.skip) {
-      query = query.skip(props.options.skip);
-    }
+    const offset = calculateOffset(page, limit);
 
-    if (props?.options?.limit) {
-      query = query.limit(props.options.limit);
-    }
+    const totalItems = await UserModel.countDocuments(filter as QueryFilter<any>);
 
-    if (props?.options?.sort) {
-      // Convert the sort object to mongoose format
-      const sortObj: Record<string, 1 | -1> = {};
-      Object.entries(props.options.sort).forEach(([key, value]) => {
-        sortObj[key] = value as 1 | -1;
-      });
-      query = query.sort(sortObj);
-    }
+    const sortObj: Record<string, 1 | -1> = {
+      [sortBy]: sortOrder === 'asc' ? 1 : -1,
+    };
 
-    const users = (await query.exec()) as unknown as Array<DatabaseUser>;
+    // Execute paginated query:
+    const users = (await UserModel.find(filter as QueryFilter<any>)
+      .sort(sortObj)
+      .skip(offset)
+      .limit(limit)
+      .lean()
+      .exec()) as unknown as Array<DatabaseUser>;
 
-    return users;
+    return {
+      data: users,
+      meta: createPaginationMeta(totalItems, page, limit),
+    };
   }
 
   async getUserById(userId: string, options: GetUserByIdOptions = {}): Promise<DatabaseUser | null> {

@@ -1,4 +1,5 @@
 import type { QueryOptions } from 'mongoose';
+import type { PaginationParams } from '../../../../common/types';
 import type { DatabaseUser } from '../../types';
 
 export type GetUserByEmailOptions = {
@@ -12,13 +13,9 @@ export type GetUserByEmailOptions = {
 export type CreateUserDto = Omit<DatabaseUser, 'id'>;
 
 export type GetUsersProps = {
-  filter: any;
-  fields: any;
-  options: {
-    limit: number;
-    skip: number;
-    sort: Record<string, number>;
-  };
+  filter?: Record<string, unknown>;
+  fields?: string[];
+  pagination?: PaginationParams;
 };
 
 export type GetUserByIdOptions = any;

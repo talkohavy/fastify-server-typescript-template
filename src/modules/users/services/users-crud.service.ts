@@ -1,8 +1,14 @@
+import type { PaginatedResult, PaginationParams } from '../../../common/types';
 import type { IUsersRepository } from '../repositories/interfaces/users.repository.base';
 import type { DatabaseUser } from '../types';
 import type { CreateUserDto, UpdateUserDto } from './interfaces/users.service.interface';
 import { UserNotFoundError } from '../logic/users.errors';
 import { createNewUserPayload } from '../logic/utils/createNewUserPayload';
+
+export type GetUsersQuery = {
+  filter?: Record<string, unknown>;
+  pagination?: PaginationParams;
+};
 
 export class UsersCrudService {
   constructor(private readonly usersRepository: IUsersRepository) {}
@@ -23,8 +29,10 @@ export class UsersCrudService {
     return user;
   }
 
-  async getUsers(_query?: any): Promise<Array<DatabaseUser>> {
-    return this.usersRepository.getUsers();
+  async getUsers(query?: GetUsersQuery): Promise<PaginatedResult<DatabaseUser>> {
+    const { filter, pagination } = query || {};
+
+    return this.usersRepository.getUsers({ filter, pagination });
   }
 
   async updateUserById(userId: string, userData: UpdateUserDto): Promise<DatabaseUser> {
