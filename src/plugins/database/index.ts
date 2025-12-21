@@ -1,2 +1,2 @@
-export { postgresPlugin, type PostgresPluginOptions } from './postgres.plugin';
-export { mongodbPlugin, type MongoDBPluginOptions } from './mongodb.plugin';
+export { postgresPlugin } from './postgres.plugin';
+export { mongodbPlugin } from './mongodb.plugin';
