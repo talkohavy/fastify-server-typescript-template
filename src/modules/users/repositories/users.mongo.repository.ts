@@ -20,7 +20,8 @@ const ALLOWED_SORT_FIELDS = new Set(['_id', 'email', 'nickname', 'created_at', '
 const ALLOWED_FILTER_FIELDS = new Set(['_id', 'email', 'nickname', 'is_active']);
 
 export class UsersMongoRepository implements IUsersRepository {
-  constructor(_mongoClient: Mongoose) {}
+  // @ts-ignore
+  constructor(private readonly _mongoClient: Mongoose) {}
 
   async getUserByEmail(email: string, options: GetUserByEmailOptions = {}): Promise<DatabaseUser | null> {
     const { options: optionsRaw = {} } = options; // , fields
